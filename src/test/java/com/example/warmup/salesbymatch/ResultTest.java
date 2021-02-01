@@ -8,7 +8,7 @@ class ResultTest {
 
     @Test
     public void ShouldReturnCorrectNumberOfPairs() {
-        int[] colors = new int[]{10, 20, 20, 10, 10, 30, 50, 10, 20};
+        var colors = new int[]{10, 20, 20, 10, 10, 30, 50, 10, 20};
         assertThat(Result.sockMerchant(colors)).isEqualTo(3);
     }
 }

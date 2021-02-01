@@ -11,11 +11,11 @@ public class Result {
      *  2. STRING path
      */
 
-    public static int countingValleys(int steps, String path) {
+    public static int countingValleys(String path) {
         // Write your code here
         int altitude = 0;
         int numberOfValleys = 0;
-        for (int i = 0; i < steps; i++) {
+        for (int i = 0; i < path.length(); i++) {
             System.out.println("Current altitude: " + altitude);
             final char c = path.charAt(i);
             if (c == 'D') {
