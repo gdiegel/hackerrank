@@ -22,10 +22,10 @@ public class Result {
     }
 
     private static boolean canJumpTwo(int[] c, int i) {
-        return atNextToLastCloud(c, i) && c[i + 2] == 0;
+        return atSecondToLastCloud(c, i) && c[i + 2] == 0;
     }
 
-    private static boolean atNextToLastCloud(int[] c, int i) {
+    private static boolean atSecondToLastCloud(int[] c, int i) {
         return i < c.length - 2;
     }
 }
