@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ResultTest {
 
     @Test
-    public void ShouldReturnCorrectNumberOfValleys() {
+    void ShouldReturnCorrectNumberOfValleys() {
         var path = "UDDDUDUU";
         assertThat(Result.countingValleys(path)).isEqualTo(1);
     }

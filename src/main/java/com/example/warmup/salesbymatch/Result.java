@@ -9,7 +9,6 @@ public class Result {
         final Map<Integer, Integer> colorCounter = new HashMap<>();
         for (final int value : sockArray) {
             colorCounter.put(value, colorCounter.getOrDefault(value, 0) + 1);
-
         }
         System.out.println(colorCounter.entrySet());
         final int pairCount = colorCounter.values().stream()
