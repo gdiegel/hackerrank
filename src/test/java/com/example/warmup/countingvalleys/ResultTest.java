@@ -8,7 +8,7 @@ class ResultTest {
 
     @Test
     void ShouldReturnCorrectNumberOfValleys() {
-        var path = "UDDDUDUU";
+        final String path = "UDDDUDUU";
         assertThat(Result.countingValleys(path)).isEqualTo(1);
     }
 }
