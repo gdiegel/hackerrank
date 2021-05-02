@@ -1,6 +1,7 @@
 package com.example.arrays.leftrotation;
 
 public class Result {
+
     static int[] rotLeft(int[] a, int d) {
         if (d == a.length) {
             return a.clone();
