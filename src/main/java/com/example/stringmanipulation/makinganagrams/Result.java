@@ -10,20 +10,18 @@ public class Result {
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 
     public static int makeAnagram(String a, String b) {
-        Map<Character, Integer> frequencies = calculateFrequency(a, b);
-        System.out.println(frequencies);
-        final int sum = frequencies.values().stream().reduce(Integer::sum).orElse(0);
+        final int sum = calculateFrequencies(a, b).values().stream().reduce(Integer::sum).orElse(0);
         return a.length() + b.length() - 2 * sum;
     }
 
-    private static Map<Character, Integer> calculateFrequency(String a, String b) {
-        Map<Character, Integer> frequencies = new HashMap<>();
-        for (char currentChar : ALPHABET) {
+    private static Map<Character, Integer> calculateFrequencies(String a, String b) {
+        final Map<Character, Integer> frequencies = new HashMap<>();
+        ALPHABET.forEach(currentChar -> {
             final int occurencesInA = countOccurences(a, currentChar);
             final int occurencesInB = countOccurences(b, currentChar);
-            int lesserOccurence = Math.min(occurencesInA, occurencesInB);
+            final int lesserOccurence = Math.min(occurencesInA, occurencesInB);
             frequencies.put(currentChar, lesserOccurence);
-        }
+        });
         return frequencies;
     }
 
