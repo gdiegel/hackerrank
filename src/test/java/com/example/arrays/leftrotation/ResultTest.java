@@ -31,9 +31,4 @@ class ResultTest {
         assertThat(rotLeft(array, 1)).containsExactly(1);
     }
 
-    @Test
-    void canRotateLargeArrayByTen() {
-        int[] array = new int[]{41, 73, 89, 7, 10, 1, 59, 58, 84, 77, 77, 97, 58, 1, 86, 58, 26, 10, 86, 51};
-        assertThat(rotLeft(array, 1)).containsExactly(77, 97, 58, 1, 86, 58, 26, 10, 86, 51, 41, 73, 89, 7, 10, 1, 59, 58, 84, 77);
-    }
 }
