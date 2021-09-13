@@ -2,10 +2,12 @@ package com.example.hashmaps.counttriplets;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 public class Result {
 
@@ -60,7 +62,9 @@ public class Result {
      2=5
      3=1,3
      9=2,4
+
      1 (3,9): 0, 1,3, 2,4 (for values i=0, j=1,3 and k=2,4 find combinatory triplets where i<j<k):
+
      0,1,2
      0,1,4
      0,3,4
@@ -68,34 +72,60 @@ public class Result {
     */
     static long countTriplets(List<Long> arr, long r) {
         long numberOfTriplets = 0L;
-        ConcurrentMap<Long, List<Integer>> valueToIndices = calculateValueToIndices(arr);
-        final Set<Long> keys = valueToIndices.keySet();
-        if (keys.size() == 1 && r == 1L) {
+        ConcurrentMap<Long, List<Long>> valueToIndices = calculateValueToIndices(arr);
+        if (valueToIndices.size() == 1 && r == 1L) {
             final int n = valueToIndices.values().stream().toList().get(0).size();
             final int k = 3;
             return factorial(n).divide(factorial(n - k).multiply(BigInteger.valueOf(6))).longValue();
 
         }
-        System.out.printf("Keys: %s%n", keys);
-        for (final Long i : keys) {
+        final Set<Long> keys = valueToIndices.keySet();
+        for (final long i : keys) {
             long j = i * r;
             long k = j * r;
             if (keys.contains(j) && keys.contains(k)) {
-                System.out.printf("i,j,k: [%d,%d,%d]%n", i, j, k);
-                final List<Integer> listI = valueToIndices.get(i);
-                final List<Integer> listJ = valueToIndices.get(j);
-                final List<Integer> listK = valueToIndices.get(k);
-                numberOfTriplets += findNumberOfTriplets(listI, listJ, listK);
+                /*
+                [9,3,1,1,3,9]
+                 0,1,2,3,4,5
+
+                1=2,3
+                3=1,4
+                9=0,5
+
+                2,3,5, 2,4,5
+
+                We can eliminate i > max(k) and j > max(k)
+                 */
+                final List<Long> listI = valueToIndices.get(i);
+                final List<Long> listJ = valueToIndices.get(j);
+                final List<Long> listK = valueToIndices.get(k);
+                final long minI = listI.stream().min(Comparator.naturalOrder()).get();
+                final long minJ = listJ.stream().min(Comparator.naturalOrder()).get();
+                final long maxK = listK.stream().max(Comparator.naturalOrder()).get();
+                final List<Long> optimizedListI = listI.parallelStream()
+                    .sorted()
+                    .filter(aLong -> aLong < maxK)
+                    .collect(Collectors.toList());
+                final List<Long> optimizedListJ = listJ.parallelStream()
+                    .sorted()
+                    .filter(aLong -> aLong < maxK)
+                    .filter(aLong -> aLong > minI)
+                    .collect(Collectors.toList());
+                final List<Long> optimizedListK = listK.parallelStream()
+                    .sorted()
+                    .filter(aLong -> aLong > minJ)
+                    .collect(Collectors.toList());
+                numberOfTriplets += findNumberOfTriplets(optimizedListI, optimizedListJ, optimizedListK);
             }
         }
         return numberOfTriplets;
     }
 
-    private static ConcurrentMap<Long, List<Integer>> calculateValueToIndices(List<Long> arr) {
-        ConcurrentMap<Long, List<Integer>> valueToIndices = new ConcurrentHashMap<>();
+    private static ConcurrentMap<Long, List<Long>> calculateValueToIndices(List<Long> arr) {
+        ConcurrentMap<Long, List<Long>> valueToIndices = new ConcurrentHashMap<>();
         for (int i = 0; i < arr.size(); i++) {
             final Long key = arr.get(i);
-            final int index = i;
+            final long index = i;
             valueToIndices.compute(key, (k, v) -> {
                 if (v == null)
                     v = new ArrayList<>();
@@ -107,20 +137,16 @@ public class Result {
         return valueToIndices;
     }
 
-    private static long findNumberOfTriplets(List<Integer> listI, List<Integer> listJ, List<Integer> listK) {
+    private static long findNumberOfTriplets(List<Long> listI, List<Long> listJ, List<Long> listK) {
+        System.out.println(listI);
+        System.out.println(listJ);
+        System.out.println(listK);
         long numberOfTriplets = 0L;
-        for (int i = 0; i < listI.size(); i++) {
-            for (int j = 0; j < listJ.size(); j++) {
-                for (int k = 0; k < listK.size(); k++) {
-                    final long entryI = listI.get(i);
-                    final long entryJ = listJ.get(j);
-                    final long entryK = listK.get(k);
-                    System.out.printf("Checking [%d,%d,%d] at (%d,%d,%d):", entryI, entryJ, entryK, i, j, k);
+        for (Long entryI : listI) {
+            for (Long entryJ : listJ) {
+                for (Long entryK : listK) {
                     if (entryI < entryJ && entryJ < entryK) {
-                        System.out.printf(" TRUE%n");
                         numberOfTriplets++;
-                    } else {
-                        System.out.printf(" FALSE%n");
                     }
                 }
             }
@@ -128,11 +154,10 @@ public class Result {
         return numberOfTriplets;
     }
 
-    public static BigInteger factorial(int n) {
+    private static BigInteger factorial(long n) {
         BigInteger result = BigInteger.ONE;
         for (int i = 2; i <= n; i++)
             result = result.multiply(BigInteger.valueOf(i));
-        System.out.printf("Factorial of %d is %d%n", n, result);
         return result;
     }
 }

@@ -35,7 +35,7 @@ class ResultTest {
     }
 
     @Test
-    void should() throws IOException {
+    void shouldPerformBigTestcase3InTime() throws IOException {
         InputStream in = this.getClass().getClassLoader().getResourceAsStream("input03.txt");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
@@ -50,6 +50,42 @@ class ResultTest {
         long ans = Result.countTriplets(arr, r);
 
         assertThat(ans).isEqualTo(166661666700000L);
+    }
+
+    @Test
+    void shouldPerformBigTestcase11InTime() throws IOException {
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("input11.txt");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+
+        String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+
+        long r = Long.parseLong(nr[1]);
+
+        List<Long> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+            .map(Long::parseLong)
+            .collect(toList());
+
+        long ans = Result.countTriplets(arr, r);
+
+        assertThat(ans).isEqualTo(1667018988625L);
+    }
+
+    @Test
+    void shouldPerformBigTestcase06InTime() throws IOException {
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("input06.txt");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+
+        String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+
+        long r = Long.parseLong(nr[1]);
+
+        List<Long> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+            .map(Long::parseLong)
+            .collect(toList());
+
+        long ans = Result.countTriplets(arr, r);
+
+        assertThat(ans).isEqualTo(2325652489L);
     }
 
 }
