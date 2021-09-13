@@ -3,10 +3,10 @@ package com.example.hashmaps.counttriplets;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 public class Result {
@@ -72,7 +72,7 @@ public class Result {
     */
     static long countTriplets(List<Long> arr, long r) {
         long numberOfTriplets = 0L;
-        ConcurrentMap<Long, List<Long>> valueToIndices = calculateValueToIndices(arr);
+        final Map<Long, List<Long>> valueToIndices = calculateValueToIndices(arr);
         if (valueToIndices.size() == 1 && r == 1L) {
             final int n = valueToIndices.values().stream().toList().get(0).size();
             final int k = 3;
@@ -121,14 +121,15 @@ public class Result {
         return numberOfTriplets;
     }
 
-    private static ConcurrentMap<Long, List<Long>> calculateValueToIndices(List<Long> arr) {
-        ConcurrentMap<Long, List<Long>> valueToIndices = new ConcurrentHashMap<>();
+    private static Map<Long, List<Long>> calculateValueToIndices(List<Long> arr) {
+        Map<Long, List<Long>> valueToIndices = new HashMap<>();
         for (int i = 0; i < arr.size(); i++) {
             final Long key = arr.get(i);
             final long index = i;
             valueToIndices.compute(key, (k, v) -> {
-                if (v == null)
+                if (v == null) {
                     v = new ArrayList<>();
+                }
                 v.add(index);
                 return v;
             });

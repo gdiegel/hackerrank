@@ -36,56 +36,32 @@ class ResultTest {
 
     @Test
     void shouldPerformBigTestcase3InTime() throws IOException {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream("input03.txt");
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-
-        String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
-
-        long r = Long.parseLong(nr[1]);
-
-        List<Long> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-            .map(Long::parseLong)
-            .collect(toList());
-
-        long ans = Result.countTriplets(arr, r);
-
-        assertThat(ans).isEqualTo(166661666700000L);
-    }
-
-    @Test
-    void shouldPerformBigTestcase11InTime() throws IOException {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream("input11.txt");
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-
-        String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
-
-        long r = Long.parseLong(nr[1]);
-
-        List<Long> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-            .map(Long::parseLong)
-            .collect(toList());
-
-        long ans = Result.countTriplets(arr, r);
-
-        assertThat(ans).isEqualTo(1667018988625L);
+        assertThat(countTripletsInFile("input03.txt")).isEqualTo(166661666700000L);
     }
 
     @Test
     void shouldPerformBigTestcase06InTime() throws IOException {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream("input06.txt");
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+        assertThat(countTripletsInFile("input06.txt")).isEqualTo(2325652489L);
+    }
 
-        String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+    @Test
+    void shouldPerformBigTestcase11InTime() throws IOException {
+        assertThat(countTripletsInFile("input11.txt")).isEqualTo(1667018988625L);
+    }
 
-        long r = Long.parseLong(nr[1]);
+    private long countTripletsInFile(String fileName) throws IOException {
+        final InputStream in = this.getClass().getClassLoader().getResourceAsStream(fileName);
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
-        List<Long> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+        final String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+
+        final long r = Long.parseLong(nr[1]);
+
+        final List<Long> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
             .map(Long::parseLong)
             .collect(toList());
 
-        long ans = Result.countTriplets(arr, r);
-
-        assertThat(ans).isEqualTo(2325652489L);
+        return Result.countTriplets(arr, r);
     }
 
 }
