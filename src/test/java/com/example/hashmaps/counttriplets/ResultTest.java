@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ResultTest {
+
+    private static final Pattern COMPILE = Pattern.compile("\\s+$");
 
     @Test
     void shouldReturn2ForExampleOne() {
@@ -35,6 +38,11 @@ class ResultTest {
     }
 
     @Test
+    void shouldReturn3ForExampleFive() {
+        assertThat(Result.countTriplets(List.of(1L, 3L, 9L, 3L, 9L, 2L), 3)).isEqualTo(3);
+    }
+
+    @Test
     void shouldPerformBigTestcase3InTime() throws IOException {
         assertThat(countTripletsInFile("input03.txt")).isEqualTo(166661666700000L);
     }
@@ -53,11 +61,11 @@ class ResultTest {
         final InputStream in = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
-        final String[] nr = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        final String[] nr = COMPILE.matcher(bufferedReader.readLine()).replaceAll("").split(" ");
 
         final long r = Long.parseLong(nr[1]);
 
-        final List<Long> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+        final List<Long> arr = Stream.of(COMPILE.matcher(bufferedReader.readLine()).replaceAll("").split(" "))
             .map(Long::parseLong)
             .collect(toList());
 
