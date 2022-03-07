@@ -44,7 +44,7 @@ public class Result {
         long num = 0L;
         final int size = arr.size();
         for (int i = size - 1; i >= 0; i--) {
-            final Long key = arr.get(i);
+            final long key = arr.get(i);
             final long index = i;
             keyIndices.compute(key, (k, v) -> {
                 if (v == null) {
@@ -55,12 +55,13 @@ public class Result {
             });
             final long key1 = key * r;
             final long key2 = key * r * r;
-            if (keyIndices.containsKey(key1) && keyIndices.containsKey(key2)) {
-                final List<Long> jIndices = keyIndices.get(key1);
-                final List<Long> kIndices = keyIndices.get(key2);
-                for (Long j : jIndices) {
-                    for (Long k : kIndices) {
-                        if (j > index && k > j) {
+            if (!keyIndices.containsKey(key1) || !keyIndices.containsKey(key2)) {
+                continue;
+            }
+            for (final long j : keyIndices.get(key1)) {
+                if (j > index) {
+                    for (final long k : keyIndices.get(key2)) {
+                        if (k > j) {
                             num++;
                         }
                     }
@@ -68,29 +69,5 @@ public class Result {
             }
         }
         return num;
-    }
-
-    private static class Triplet {
-        private final long first;
-        private final long second;
-        private final long third;
-
-        private Triplet(long first, long second, long third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
-        }
-
-        public long getFirst() {
-            return first;
-        }
-
-        public long getSecond() {
-            return second;
-        }
-
-        public long getThird() {
-            return third;
-        }
     }
 }
