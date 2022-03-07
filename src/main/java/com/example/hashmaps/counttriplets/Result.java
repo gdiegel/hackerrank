@@ -1,9 +1,8 @@
 package com.example.hashmaps.counttriplets;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Result {
@@ -41,36 +40,57 @@ public class Result {
      * Save 1,3,4, 1,2,4
      */
     static long countTriplets(List<Long> arr, long r) {
-        final Set<List<Long>> keyIndices = calculateKeyIndices(arr, r);
-        return keyIndices.size();
-    }
-
-    private static Set<List<Long>> calculateKeyIndices(List<Long> arr, long r) {
-        final Map<Long, Set<Long>> keyIndices = new ConcurrentHashMap<>(0);
-        final Set<List<Long>> known = new HashSet<>(0);
+        final Map<Long, List<Long>> keyIndices = new ConcurrentHashMap<>(0);
+        long num = 0L;
         final int size = arr.size();
         for (int i = size - 1; i >= 0; i--) {
             final Long key = arr.get(i);
             final long index = i;
             keyIndices.compute(key, (k, v) -> {
                 if (v == null) {
-                    v = new HashSet<>(0);
+                    v = new ArrayList<>(0);
                 }
                 v.add(index);
                 return v;
             });
-            if (keyIndices.containsKey(key * r) && keyIndices.containsKey(key * r * r)) {
-                final Set<Long> jIndices = keyIndices.get(key * r);
-                final Set<Long> kIndices = keyIndices.get(key * r * r);
+            final long key1 = key * r;
+            final long key2 = key * r * r;
+            if (keyIndices.containsKey(key1) && keyIndices.containsKey(key2)) {
+                final List<Long> jIndices = keyIndices.get(key1);
+                final List<Long> kIndices = keyIndices.get(key2);
                 for (Long j : jIndices) {
                     for (Long k : kIndices) {
                         if (j > index && k > j) {
-                            known.add(List.of(index, j, k));
+                            num++;
                         }
                     }
                 }
             }
         }
-        return known;
+        return num;
+    }
+
+    private static class Triplet {
+        private final long first;
+        private final long second;
+        private final long third;
+
+        private Triplet(long first, long second, long third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
+        }
+
+        public long getFirst() {
+            return first;
+        }
+
+        public long getSecond() {
+            return second;
+        }
+
+        public long getThird() {
+            return third;
+        }
     }
 }

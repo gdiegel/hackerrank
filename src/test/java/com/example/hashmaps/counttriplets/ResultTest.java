@@ -47,10 +47,10 @@ class ResultTest {
 //        assertThat(countTripletsInFile("input03.txt")).isEqualTo(166661666700000L);
 //    }
 //
-//    @Test
-//    void shouldPerformBigTestcase06InTime() throws IOException {
-//        assertThat(countTripletsInFile("input06.txt")).isEqualTo(2325652489L);
-//    }
+    @Test
+    void shouldPerformBigTestcase06InTime() throws IOException {
+        assertThat(countTripletsInFile("input06.txt")).isEqualTo(2325652489L);
+    }
 //
 //    @Test
 //    void shouldPerformBigTestcase11InTime() throws IOException {
