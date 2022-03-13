@@ -39,12 +39,12 @@ public class Result {
      * Get all ascending triplets from current index and indices of j and k
      * Save 1,3,4, 1,2,4
      */
-    static long countTriplets(List<Long> arr, long r) {
+    static long countTriplets(List<Long> array, long r) {
         final Map<Long, List<Long>> keyIndices = new ConcurrentHashMap<>(0);
-        long num = 0L;
-        final int size = arr.size();
-        for (int i = size - 1; i >= 0; i--) {
-            final long key = arr.get(i);
+        final int arrLength = array.size();
+        long numberOfTriplets = 0L;
+        for (int i = arrLength - 1; i >= 0; i--) {
+            final long key = array.get(i);
             final long index = i;
             keyIndices.compute(key, (k, v) -> {
                 if (v == null) {
@@ -62,12 +62,12 @@ public class Result {
                 if (j > index) {
                     for (final long k : keyIndices.get(key2)) {
                         if (k > j) {
-                            num++;
+                            numberOfTriplets++;
                         }
                     }
                 }
             }
         }
-        return num;
+        return numberOfTriplets;
     }
 }
