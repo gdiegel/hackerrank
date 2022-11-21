@@ -8,23 +8,22 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Result {
 
     /**
-     *
      * [1, 3, 9, 9, 27, 81]
-     *  0, 1, 2, 3,  4,  5
-     *
+     * 0, 1, 2, 3,  4,  5
+     * <p>
      * 1=[0],
      * 3=[1],
      * 9=[2,3],
      * 27=[4]
      * 81=[5],
-     *
+     * <p>
      * 0,1,2
      * 0,1,3
      * 1,2,4
      * 1,3,4
      * 2,4,5
      * 3,4,5
-     *
+     * <p>
      * 81=5
      * 27=4 Map contains key 27*r and 27*r*r?
      * 9=3 Map contains key 9*r and 9*r*r? Yes -> Get indices for both
@@ -41,9 +40,9 @@ public class Result {
      */
     static long countTriplets(List<Long> array, long r) {
         final Map<Long, List<Long>> keyIndices = new ConcurrentHashMap<>(0);
-        final int arrLength = array.size();
+        final int arrayLength = array.size();
         long numberOfTriplets = 0L;
-        for (int i = arrLength - 1; i >= 0; i--) {
+        for (int i = arrayLength - 1; i >= 0; i--) {
             final long key = array.get(i);
             final long index = i;
             keyIndices.compute(key, (k, v) -> {
